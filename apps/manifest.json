@@ -107,30 +107,27 @@
     },
     {
       "id": "space-war-games-comparison",
-      "type": "dataset",
+      "type": "doc",
       "title": "Space War Games \u2014 Realism vs Playability",
       "subtitle": "15-title comparison of orbital mechanics fidelity and combat realism",
-      "description": "Comparison spreadsheet of 15 space and sci-fi games rated on orbital mechanics fidelity (n-body / patched-conic / on-rails / none), simplifications used, combat tactics realism (delta-v, light-lag, IR signatures, engagement geometry), and performance trade-offs. Includes Children of a Dead Earth, Kerbal Space Program, Flight of Nova, Alliance Space Guard, Nebulous: Fleet Command, Terra Invicta, Reentry, Highfleet, Space Engineers, Star Citizen, Elite Dangerous, Independence War 2, The Expanse: Osiris Reborn, FTL, and Homeworld 3, with a Realism vs Playability scatter chart and per-game scores.",
+      "description": "Comparison of 15 space and sci-fi games rated on orbital mechanics fidelity (n-body / patched-conic / on-rails / none), simplifications used, combat tactics realism (delta-v, light-lag, IR signatures, engagement geometry), and performance trade-offs. Includes Children of a Dead Earth, Kerbal Space Program, Flight of Nova, Alliance Space Guard, Nebulous: Fleet Command, Terra Invicta, Reentry, Highfleet, Space Engineers, Star Citizen, Elite Dangerous, Independence War 2, The Expanse: Osiris Reborn, FTL, and Homeworld 3, with a Realism vs Playability scatter chart, per-game scores, and methodology notes.",
       "path": "apps/space-war-games-comparison/",
-      "file": "apps/space-war-games-comparison/data.xlsx",
+      "file": "apps/space-war-games-comparison/space-war-games-comparison.pdf",
       "thumbnail": "apps/space-war-games-comparison/thumbnail.png",
       "tags": [
         "games",
         "space",
         "comparison",
-        "research",
-        "dataset"
+        "research"
       ],
       "tech": [
-        "openpyxl",
-        "Excel",
+        "ReportLab",
         "Python"
       ],
       "built_at": "2026-05-15",
-      "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "size_bytes": 30066,
-      "rows": 15,
-      "columns": 11
+      "mime": "application/pdf",
+      "size_bytes": 105162,
+      "pages": 14
     },
     {
       "id": "orbital-warfare-sim",
