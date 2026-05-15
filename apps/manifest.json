@@ -237,6 +237,33 @@
       "built_at": "2026-05-15",
       "file": "apps/sats-pitch/index.html",
       "source": "sources/sats-pitch/"
+    },
+    {
+      "id": "rust-channels",
+      "type": "app",
+      "title": "Rust Channels",
+      "subtitle": "Message passing primitives across the Rust ecosystem",
+      "description": "Interactive reference for message passing in Rust. Compares 7 crates (std, tokio, crossbeam, flume, kanal, async-channel, crossfire) and 19 channel variants across MPSC, MPMC, oneshot, broadcast, watch, and SPSC patterns. Includes an interactive decision flowchart, expandable idiomatic code snippets per channel, relative performance tiers, channel topology diagrams, and a full feature comparison table. Light/dark theme.",
+      "path": "apps/rust-channels/",
+      "thumbnail": "apps/rust-channels/thumbnail.png",
+      "tags": [
+        "rust",
+        "concurrency",
+        "async",
+        "tokio",
+        "channels",
+        "reference",
+        "interactive"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "SVG"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/rust-channels/index.html",
+      "source": "sources/rust-channels/"
     }
   ]
 }
