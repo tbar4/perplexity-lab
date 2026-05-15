@@ -27,20 +27,20 @@
       "file": "apps/planning-lab/index.html"
     },
     {
-      "id": "sda-rl-bench",
+      "id": "sda-rl-benchmarks",
       "type": "app",
       "title": "SDA\u00b7RL Benchmark Index",
-      "subtitle": "Space Domain Awareness \u00d7 Reinforcement Learning",
-      "description": "A live, filterable comparison of every reinforcement-learning benchmark in the Space Domain Awareness literature \u2014 narrow-FOV SSA environments, OrbitZoo, NORAD TLE agents, Space-Track ephemeris pipelines, Starlink validation, BSK-RL, KSPDG, SPLID \u2014 with side-by-side notes on strengths, limitations, and reproducibility.",
-      "path": "apps/sda-rl-bench/",
-      "thumbnail": "apps/sda-rl-bench/thumbnail.png",
-      "source": "sources/sda-rl-bench/",
+      "subtitle": "Space Domain Awareness \u00d7 Reinforcement Learning \u00b7 20 benchmarks",
+      "description": "Live, filterable comparison of 20 reinforcement-learning benchmarks across the Space Domain Awareness literature, from the foundational Linares & Furfaro 2016/17 work through 2026 releases (EOS-Bench, SpaceGym proximity ops). Filter by category, dataset type, RSO count, sensor modality, and code/data access. Includes narrow-FOV SSA environments, OrbitZoo (Starlink-validated), NORAD TLE-based agents, Space-Track ephemeris pipelines, BSK-RL, KSPDG, SPLID, MIT-LL SpaceGym, Auburn P-LEO, and more, with side-by-side notes on strengths, limitations, reproducibility, and links to papers and code.",
+      "path": "apps/sda-rl-benchmarks/",
+      "thumbnail": "apps/sda-rl-benchmarks/thumbnail.png",
       "tags": [
         "research",
         "space",
         "reinforcement-learning",
         "ssa",
-        "interactive"
+        "interactive",
+        "dashboard"
       ],
       "tech": [
         "React",
@@ -48,33 +48,6 @@
         "TypeScript",
         "Tailwind",
         "shadcn/ui"
-      ],
-      "built_at": "2026-05-15",
-      "file": "apps/sda-rl-bench/index.html"
-    },
-    {
-      "id": "sda-rl-benchmarks",
-      "type": "app",
-      "title": "SDA RL Benchmarks Dashboard",
-      "subtitle": "Live comparison of reinforcement learning benchmarks for Space Domain Awareness",
-      "description": "Interactive dashboard comparing 16 reinforcement learning benchmarks and environments for Space Domain Awareness and Space Situational Awareness (2016-2026). Filter by dataset type, real vs. simulated data, RSO count, sensor modality, and code availability. Side-by-side comparison view with strengths, limitations, reproducibility notes, action/observation/reward formulations, and direct links to papers and code. Covers narrow-FOV SSA sensor tasking (MIT ARCLab), OrbitZoo (NeurIPS 2025, Starlink-validated), NORAD TLE-based environments (Oakes AMOS 2024), KSPDG, BSK-RL, SPLID/AI-SSA Challenge, EOS-Bench, and more.",
-      "path": "apps/sda-rl-benchmarks/",
-      "thumbnail": "apps/sda-rl-benchmarks/thumbnail.png",
-      "source": "sources/sda-rl-benchmarks/",
-      "tags": [
-        "space-domain-awareness",
-        "ssa",
-        "reinforcement-learning",
-        "benchmarks",
-        "satellite",
-        "orbital-mechanics",
-        "aerospace"
-      ],
-      "tech": [
-        "React",
-        "Tailwind CSS",
-        "Vanilla JS",
-        "Static HTML"
       ],
       "built_at": "2026-05-15",
       "file": "apps/sda-rl-benchmarks/index.html",
