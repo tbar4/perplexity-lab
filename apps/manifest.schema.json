@@ -9,18 +9,42 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "title", "path"],
+        "required": ["id", "type", "title", "path"],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "type": {
+            "type": "string",
+            "enum": ["app", "doc", "image", "notebook", "dataset", "video"]
+          },
           "title": { "type": "string" },
           "subtitle": { "type": "string" },
           "description": { "type": "string" },
-          "path": { "type": "string" },
+          "path": {
+            "type": "string",
+            "description": "Folder served by Pages for this artifact, always apps/<id>/"
+          },
+          "file": {
+            "type": "string",
+            "description": "Relative path (from repo root) to the primary artifact file. For type=app, this is index.html; for type=doc this is the PDF; etc."
+          },
           "thumbnail": { "type": "string" },
           "source": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "tech": { "type": "array", "items": { "type": "string" } },
-          "built_at": { "type": "string", "format": "date" }
+          "built_at": { "type": "string", "format": "date" },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "mime": { "type": "string" },
+          "pages": { "type": "integer", "minimum": 1 },
+          "dimensions": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "integer", "minimum": 1 },
+              "height": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "duration_s": { "type": "number", "minimum": 0 },
+          "rows": { "type": "integer", "minimum": 0 },
+          "columns": { "type": "integer", "minimum": 0 }
         }
       }
     }
