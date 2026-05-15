@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Perplexity Lab manifest",
+  "type": "object",
+  "required": ["apps"],
+  "properties": {
+    "updated_at": { "type": "string", "format": "date" },
+    "apps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "path"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "title": { "type": "string" },
+          "subtitle": { "type": "string" },
+          "description": { "type": "string" },
+          "path": { "type": "string" },
+          "thumbnail": { "type": "string" },
+          "source": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "tech": { "type": "array", "items": { "type": "string" } },
+          "built_at": { "type": "string", "format": "date" }
+        }
+      }
+    }
+  }
+}

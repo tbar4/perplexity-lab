@@ -1,0 +1,18 @@
+{
+  "$schema": "./manifest.schema.json",
+  "updated_at": "2026-05-15",
+  "apps": [
+    {
+      "id": "planning-lab",
+      "title": "Planning Lab",
+      "subtitle": "RL vs Transformer Bench",
+      "description": "Interactive comparison of reinforcement learning and transformer next-token prediction for strategic planning, anchored to primary arXiv papers from 2017 to 2026.",
+      "path": "apps/planning-lab/",
+      "thumbnail": "apps/planning-lab/thumbnail.png",
+      "source": "sources/planning-lab/",
+      "tags": ["research", "ml", "interactive", "dashboard"],
+      "tech": ["React", "Vite", "Recharts", "Tailwind"],
+      "built_at": "2026-05-15"
+    }
+  ]
+}

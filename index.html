@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perplexity Lab — apps built by Computer</title>
+    <meta name="description" content="A catalog of interactive web apps built by Perplexity Computer for Trevor." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2306b6d4'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <style>
+      :root {
+        --bg: #0a0a0b;
+        --bg-elev: #111114;
+        --bg-card: #141418;
+        --border: #1f1f25;
+        --border-strong: #2a2a32;
+        --text: #e8e8ec;
+        --text-dim: #a0a0aa;
+        --text-faint: #6a6a74;
+        --cyan: #22d3ee;
+        --amber: #fbbf24;
+        --violet: #a78bfa;
+        --accent: var(--cyan);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+        background:
+          radial-gradient(800px 400px at 80% -10%, rgba(34, 211, 238, 0.06), transparent 60%),
+          radial-gradient(600px 400px at 10% 100%, rgba(167, 139, 250, 0.05), transparent 60%),
+          var(--bg);
+      }
+      a { color: inherit; text-decoration: none; }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+      header.top {
+        border-bottom: 1px solid var(--border);
+        background: rgba(10, 10, 11, 0.8);
+        backdrop-filter: blur(12px);
+        position: sticky; top: 0; z-index: 10;
+      }
+      .top-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .logo {
+        width: 36px; height: 36px;
+        background: linear-gradient(135deg, var(--cyan), var(--violet));
+        border-radius: 10px;
+        display: grid; place-items: center;
+        font-weight: 700; color: #0a0a0b; font-size: 18px;
+      }
+      .brand-text h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+      .brand-text p { margin: 0; font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+      .top-meta { font-size: 12px; color: var(--text-dim); display: flex; gap: 16px; align-items: center; }
+      .top-meta a { color: var(--text-dim); }
+      .top-meta a:hover { color: var(--text); }
+      .pulse { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 0 #10b981; animation: pulse 2s infinite; display: inline-block; margin-right: 6px; vertical-align: middle; }
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+
+      section.hero { padding: 80px 0 48px; }
+      .eyebrow { color: var(--text-faint); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; font-family: "JetBrains Mono", ui-monospace, monospace; }
+      h2.title { font-size: 44px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 16px; }
+      h2.title .accent { background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lede { color: var(--text-dim); font-size: 17px; line-height: 1.6; max-width: 720px; margin: 0; }
+
+      section.stats { padding: 24px 0 48px; }
+      .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+      .stat .label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .stat .value { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+      .stat.cyan .value { color: var(--cyan); }
+      .stat.amber .value { color: var(--amber); }
+      .stat.violet .value { color: var(--violet); }
+
+      section.apps { padding: 24px 0 96px; }
+      .apps-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+      .apps-head h3 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); }
+      .apps-head .filter { font-size: 12px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 420px)); gap: 20px; justify-content: start; }
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        display: flex; flex-direction: column;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: var(--border-strong);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      }
+      .thumb-link { display: block; }
+      .card-title-link { color: inherit; }
+      .thumb { aspect-ratio: 16 / 10; background: var(--bg-elev); border-bottom: 1px solid var(--border); overflow: hidden; position: relative; }
+      .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+      .thumb-placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.02) 8px, rgba(255,255,255,0.02) 16px); }
+      .card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+      .card-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+      .card-title { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+      .card-subtitle { font-size: 12px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .card-desc { color: var(--text-dim); font-size: 13px; line-height: 1.55; margin: 6px 0 14px; }
+      .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+      .tag { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.04em; text-transform: uppercase; font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+      .card-foot .meta { font-size: 11px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .card-foot .actions { display: flex; gap: 8px; }
+      .btn {
+        font-size: 12px; padding: 6px 12px; border-radius: 8px;
+        background: transparent; border: 1px solid var(--border-strong); color: var(--text);
+        cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .btn:hover { background: var(--bg-elev); border-color: #3a3a44; }
+      .btn.primary { background: var(--cyan); color: #0a0a0b; border-color: var(--cyan); font-weight: 500; }
+      .btn.primary:hover { background: #67e8f9; border-color: #67e8f9; }
+
+      .empty { padding: 48px; text-align: center; color: var(--text-faint); background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: 14px; }
+
+      footer { border-top: 1px solid var(--border); padding: 32px 0; color: var(--text-faint); font-size: 12px; }
+      .foot-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+
+      @media (max-width: 720px) {
+        section.hero { padding: 48px 0 32px; }
+        h2.title { font-size: 32px; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="container top-row">
+        <a class="brand" href="./">
+          <div class="logo">P</div>
+          <div class="brand-text">
+            <h1>Perplexity Lab</h1>
+            <p>Apps built by Computer · for Trevor</p>
+          </div>
+        </a>
+        <div class="top-meta">
+          <span><span class="pulse"></span>Live</span>
+          <a href="https://github.com/tbar4/perplexity-lab" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="eyebrow">v0.1 · A growing catalog</div>
+          <h2 class="title">Every app <span class="accent">Computer</span> builds, in one place.</h2>
+          <p class="lede">Interactive dashboards, research tools, and visualizations. Each app is pre-built, deployed as static files, and lives at its own URL under this site.</p>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat cyan"><div class="label">Apps deployed</div><div class="value" id="stat-count">—</div></div>
+            <div class="stat amber"><div class="label">Latest build</div><div class="value" id="stat-latest" style="font-size:18px">—</div></div>
+            <div class="stat violet"><div class="label">Tech families</div><div class="value" id="stat-tech" style="font-size:18px">—</div></div>
+            <div class="stat"><div class="label">Hosted on</div><div class="value" style="font-size:18px">GitHub Pages</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="apps">
+        <div class="container">
+          <div class="apps-head">
+            <h3>Catalog</h3>
+            <div class="filter" id="filter-summary"></div>
+          </div>
+          <div class="apps-grid" id="apps-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container foot-row">
+        <span>Source: <a href="https://github.com/tbar4/perplexity-lab" style="color: var(--text-dim);">github.com/tbar4/perplexity-lab</a></span>
+        <span>Built with Perplexity Computer</span>
+      </div>
+    </footer>
+
+    <script>
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      }
+      function fmtDate(s) {
+        if (!s) return '';
+        const d = new Date(s);
+        if (Number.isNaN(d.getTime())) return s;
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      async function load() {
+        const grid = document.getElementById('apps-grid');
+        try {
+          const res = await fetch('apps/manifest.json', { cache: 'no-cache' });
+          if (!res.ok) throw new Error('manifest fetch failed: ' + res.status);
+          const data = await res.json();
+          const apps = (data.apps || []).slice().sort((a, b) => (b.built_at || '').localeCompare(a.built_at || ''));
+
+          document.getElementById('stat-count').textContent = apps.length;
+          const latest = apps[0]?.built_at ? fmtDate(apps[0].built_at) : '—';
+          document.getElementById('stat-latest').textContent = latest;
+          const tech = new Set();
+          apps.forEach(a => (a.tech || []).forEach(t => tech.add(t)));
+          document.getElementById('stat-tech').textContent = tech.size || '—';
+          document.getElementById('filter-summary').textContent = apps.length + ' app' + (apps.length === 1 ? '' : 's');
+
+          if (apps.length === 0) {
+            grid.innerHTML = '<div class="empty">No apps yet. Come back soon.</div>';
+            return;
+          }
+
+          grid.innerHTML = apps.map(app => {
+            const thumb = app.thumbnail
+              ? '<img loading="lazy" src="' + escapeHtml(app.thumbnail) + '" alt="' + escapeHtml(app.title) + ' preview" />'
+              : '<div class="thumb-placeholder">no preview</div>';
+            const tags = (app.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+            const sourceLink = app.source ? '<a class="btn" href="' + escapeHtml(app.source) + '" target="_blank" rel="noopener">Source</a>' : '';
+            return [
+              '<article class="card" data-href="' + escapeHtml(app.path) + '">',
+              '  <a class="thumb-link" href="' + escapeHtml(app.path) + '" aria-label="Open ' + escapeHtml(app.title) + '">',
+              '    <div class="thumb">' + thumb + '</div>',
+              '  </a>',
+              '  <div class="card-body">',
+              '    <a class="card-title-link" href="' + escapeHtml(app.path) + '">',
+              '      <div class="card-title-row">',
+              '        <div class="card-title">' + escapeHtml(app.title) + '</div>',
+              app.subtitle ? '        <div class="card-subtitle">' + escapeHtml(app.subtitle) + '</div>' : '',
+              '      </div>',
+              '    </a>',
+              app.description ? '    <div class="card-desc">' + escapeHtml(app.description) + '</div>' : '',
+              tags ? '    <div class="card-tags">' + tags + '</div>' : '',
+              '    <div class="card-foot">',
+              '      <span class="meta">' + (app.built_at ? fmtDate(app.built_at) : '') + '</span>',
+              '      <div class="actions">',
+              sourceLink,
+              '        <a class="btn primary" href="' + escapeHtml(app.path) + '">Open →</a>',
+              '      </div>',
+              '    </div>',
+              '  </div>',
+              '</article>'
+            ].join('\n');
+          }).join('');
+        } catch (e) {
+          grid.innerHTML = '<div class="empty">Failed to load manifest: ' + escapeHtml(e.message) + '</div>';
+        }
+      }
+      load();
+    </script>
+  </body>
+</html>
