@@ -64,4 +64,5 @@ See [apps/manifest.json](./apps/manifest.json) for the machine-readable list.
 
 | App | Description | URL |
 | --- | --- | --- |
-| [Planning Lab](./apps/planning-lab/) | RL vs Transformer next-token prediction for strategic planning, anchored to arXiv 2017-2026 | [Open](https://tbar4.github.io/perplexity-lab/apps/planning-lab/) |
+| [Planning Lab](./apps/planning-lab/) | Interactive comparison of reinforcement learning and transformer next-token prediction for strategic planning, anchored to primary arXiv papers from 2017 to 2026. | [Open](https://tbar4.github.io/perplexity-lab/apps/planning-lab/) |
+| [SDA·RL Benchmark Index](./apps/sda-rl-bench/) | A live, filterable comparison of every reinforcement-learning benchmark in the Space Domain Awareness literature — narrow-FOV SSA environments, OrbitZoo, NORAD TLE agents, Space-Track ephemeris pipelines, Starlink validation, BSK-RL, KSPDG, SPLID — with side-by-side notes on strengths, limitations, and reproducibility. | [Open](https://tbar4.github.io/perplexity-lab/apps/sda-rl-bench/) |
