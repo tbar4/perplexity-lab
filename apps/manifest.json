@@ -131,6 +131,30 @@
       "size_bytes": 30066,
       "rows": 15,
       "columns": 11
+    },
+    {
+      "id": "orbital-warfare-sim",
+      "type": "app",
+      "title": "Orbital Warfare Simulator",
+      "subtitle": "Hohmann, Lambert, LOS occlusion, lunar perturbations",
+      "description": "Interactive 3D orbital simulator for space warfare scenarios around Earth. RK4 propagator with optional J2 and lunar third-body gravity, Hohmann transfer auto-phasing, Universal-Variables Lambert intercept solver, line-of-sight occlusion via Earth-sphere ray test, and live readouts of range, range-rate, and \u0394v budget. Four scenarios: LEO->GEO Hohmann chase, Lambert intercept, co-orbital inspection, and cislunar perturbed chase.",
+      "path": "apps/orbital-warfare-sim/",
+      "thumbnail": "apps/orbital-warfare-sim/thumbnail.png",
+      "tags": [
+        "space",
+        "orbital-mechanics",
+        "simulation",
+        "interactive",
+        "ssa"
+      ],
+      "tech": [
+        "Three.js",
+        "JavaScript",
+        "WebGL"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/orbital-warfare-sim/index.html",
+      "source": "sources/orbital-warfare-sim/"
     }
   ]
 }

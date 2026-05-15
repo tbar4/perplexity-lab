@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orbital Warfare Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="view"></canvas>
+
+    <header class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+          <circle cx="16" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <ellipse cx="16" cy="16" rx="14" ry="5" fill="none" stroke="currentColor" stroke-width="1" transform="rotate(-22 16 16)"/>
+          <circle cx="29" cy="9" r="1.6" fill="currentColor"/>
+        </svg>
+        <span>ORBITAL WARFARE SIMULATOR</span>
+      </div>
+      <div class="readout" id="readout">
+        <span class="r-item"><label>MET</label><span id="r-met">000d 00:00:00</span></span>
+        <span class="r-item"><label>RANGE</label><span id="r-range">— km</span></span>
+        <span class="r-item"><label>R-RATE</label><span id="r-rrate">— m/s</span></span>
+        <span class="r-item"><label>LOS</label><span id="r-los" class="los">—</span></span>
+        <span class="r-item"><label>Δv USED</label><span id="r-dv">0.000 km/s</span></span>
+      </div>
+    </header>
+
+    <aside class="panel">
+      <section class="block">
+        <h3>Scenario</h3>
+        <select id="scenario">
+          <option value="hohmann">Hohmann chase (LEO → GEO)</option>
+          <option value="lambert">Lambert intercept</option>
+          <option value="coorbital">Co-orbital inspection</option>
+          <option value="lunar">Lunar-perturbed chase</option>
+        </select>
+        <button id="apply-scenario" class="primary">Load scenario</button>
+      </section>
+
+      <section class="block">
+        <h3>Chaser orbit</h3>
+        <div class="row"><label>Altitude</label><input type="range" id="c-alt" min="200" max="200000" step="10" value="400"><span id="c-alt-v">400 km</span></div>
+        <div class="row"><label>Inclination</label><input type="range" id="c-inc" min="0" max="90" step="0.1" value="28.5"><span id="c-inc-v">28.5°</span></div>
+        <div class="row"><label>RAAN</label><input type="range" id="c-raan" min="0" max="360" step="1" value="0"><span id="c-raan-v">0°</span></div>
+        <div class="row"><label>True anomaly</label><input type="range" id="c-ta" min="0" max="360" step="1" value="0"><span id="c-ta-v">0°</span></div>
+      </section>
+
+      <section class="block">
+        <h3>Target orbit</h3>
+        <div class="row"><label>Altitude</label><input type="range" id="t-alt" min="200" max="200000" step="10" value="35786"><span id="t-alt-v">35786 km</span></div>
+        <div class="row"><label>Inclination</label><input type="range" id="t-inc" min="0" max="90" step="0.1" value="0"><span id="t-inc-v">0°</span></div>
+        <div class="row"><label>RAAN</label><input type="range" id="t-raan" min="0" max="360" step="1" value="0"><span id="t-raan-v">0°</span></div>
+        <div class="row"><label>True anomaly</label><input type="range" id="t-ta" min="0" max="360" step="1" value="100"><span id="t-ta-v">100°</span></div>
+      </section>
+
+      <section class="block">
+        <h3>Maneuver</h3>
+        <div class="seg" role="tablist">
+          <button class="seg-btn active" data-mode="hohmann">Hohmann</button>
+          <button class="seg-btn" data-mode="lambert">Lambert</button>
+          <button class="seg-btn" data-mode="manual">Manual Δv</button>
+        </div>
+
+        <div id="hohmann-ctrl" class="mode-ctrl">
+          <div class="row"><label>Auto phasing</label><input type="checkbox" id="auto-phase" checked></div>
+          <button id="plan-hohmann" class="primary">Plan & arm transfer</button>
+          <div class="info" id="hohmann-info">—</div>
+        </div>
+
+        <div id="lambert-ctrl" class="mode-ctrl hidden">
+          <div class="row"><label>Time of flight</label><input type="range" id="lam-tof" min="600" max="86400" step="60" value="7200"><span id="lam-tof-v">2.00 hr</span></div>
+          <div class="row"><label>Short-way</label><input type="checkbox" id="lam-short" checked></div>
+          <button id="plan-lambert" class="primary">Solve & arm intercept</button>
+          <div class="info" id="lambert-info">—</div>
+        </div>
+
+        <div id="manual-ctrl" class="mode-ctrl hidden">
+          <div class="row"><label>Δv prograde</label><input type="range" id="m-prog" min="-3" max="3" step="0.01" value="0"><span id="m-prog-v">0.00 km/s</span></div>
+          <div class="row"><label>Δv radial</label><input type="range" id="m-rad" min="-3" max="3" step="0.01" value="0"><span id="m-rad-v">0.00 km/s</span></div>
+          <div class="row"><label>Δv normal</label><input type="range" id="m-norm" min="-3" max="3" step="0.01" value="0"><span id="m-norm-v">0.00 km/s</span></div>
+          <button id="exec-manual" class="primary">Execute burn now</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <h3>Perturbations</h3>
+        <div class="row"><label>Moon gravity</label><input type="checkbox" id="pert-moon"></div>
+        <div class="row"><label>J2 oblateness</label><input type="checkbox" id="pert-j2"></div>
+      </section>
+
+      <section class="block">
+        <h3>Display</h3>
+        <div class="row"><label>Show LOS line</label><input type="checkbox" id="show-los" checked></div>
+        <div class="row"><label>Show Moon</label><input type="checkbox" id="show-moon" checked></div>
+        <div class="row"><label>Camera</label>
+          <select id="cam-mode">
+            <option value="free">Free orbit</option>
+            <option value="chaser">Chase chaser</option>
+            <option value="target">Track target</option>
+          </select>
+        </div>
+      </section>
+    </aside>
+
+    <footer class="timebar">
+      <button id="play" class="icon">▶</button>
+      <button id="reset" class="icon">⟲</button>
+      <label class="speed">
+        Speed
+        <input type="range" id="speed" min="0" max="6" step="1" value="3">
+        <span id="speed-v">1000×</span>
+      </label>
+      <div class="legend">
+        <span class="dot c-chaser"></span>Chaser
+        <span class="dot c-target"></span>Target
+        <span class="dot c-transfer"></span>Transfer
+      </div>
+    </footer>
+
+    <div id="banner" class="banner hidden"></div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
