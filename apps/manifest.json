@@ -206,6 +206,37 @@
         "height": 1080
       },
       "duration_s": 271.88
+    },
+    {
+      "id": "sats-pitch",
+      "type": "app",
+      "title": "EchoStar (SATS) Investment Thesis",
+      "subtitle": "The Battle Network Company Wall Street Doesn't See",
+      "description": "Interactive long thesis on EchoStar Corporation (NASDAQ: SATS). Dual-layered pitch combining (1) Hughes Network Systems as an indispensable node in the DoD's emerging hybrid space architecture \u2014 backed by MDA SHIELD, AFRL STAR-FISH, CASR participation, and DoD private 5G contracts \u2014 and (2) the ~2.8% SpaceX stake as a valuation floor. Includes geopolitical demand framing, financial segment analysis, sum-of-parts valuation, catalyst timeline, and risk matrix.",
+      "path": "apps/sats-pitch/",
+      "thumbnail": "apps/sats-pitch/thumbnail.png",
+      "tags": [
+        "investment-thesis",
+        "space",
+        "defense",
+        "satcom",
+        "echostar",
+        "spacex",
+        "battle-network",
+        "ussf",
+        "casr"
+      ],
+      "tech": [
+        "React",
+        "Vite",
+        "Tailwind CSS",
+        "shadcn/ui",
+        "Recharts",
+        "TypeScript"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/sats-pitch/index.html",
+      "source": "sources/sats-pitch/"
     }
   ]
 }
