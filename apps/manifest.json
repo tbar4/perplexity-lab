@@ -155,6 +155,60 @@
       "built_at": "2026-05-15",
       "file": "apps/orbital-warfare-sim/index.html",
       "source": "sources/orbital-warfare-sim/"
+    },
+    {
+      "id": "orbital-mechanics-warfare",
+      "type": "app",
+      "title": "Orbital Mechanics & Space Warfare",
+      "subtitle": "Why physics breaks every fighter pilot reflex in space",
+      "description": "Four interactive simulations explaining why orbital combat is governed by celestial mechanics, not firepower \u2014 Clohessy\u2013Wiltshire relative motion (retrograde paradox), Lagrange point stability, 90-minute LEO line-of-sight windows, and Hohmann transfer vs. direct intercept \u0394v comparison.",
+      "path": "apps/orbital-mechanics-warfare/",
+      "thumbnail": "apps/orbital-mechanics-warfare/thumbnail.png",
+      "source": "sources/orbital-mechanics-warfare/",
+      "tags": [
+        "space",
+        "orbital-mechanics",
+        "space-warfare",
+        "visualization",
+        "simulation"
+      ],
+      "tech": [
+        "HTML",
+        "Canvas2D",
+        "JavaScript"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/orbital-mechanics-warfare/index.html"
+    },
+    {
+      "id": "orbital-mechanics-warfare-video",
+      "type": "video",
+      "title": "Orbital Mechanics & Space Warfare (Narrated)",
+      "subtitle": "4.5-minute narrated walkthrough",
+      "description": "A narrated MP4 explainer covering four reasons orbital mechanics complicates space warfare \u2014 relative motion paradoxes, Lagrange point stability, line-of-sight windows over 90-minute orbits, and fuel-optimal intercepts vs. direct pursuit. Companion to the interactive app `orbital-mechanics-warfare`.",
+      "path": "apps/orbital-mechanics-warfare-video/",
+      "thumbnail": "apps/orbital-mechanics-warfare-video/thumbnail.png",
+      "tags": [
+        "space",
+        "orbital-mechanics",
+        "space-warfare",
+        "video",
+        "explainer"
+      ],
+      "tech": [
+        "MP4",
+        "Playwright",
+        "Gemini-TTS"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/orbital-mechanics-warfare-video/video.mp4",
+      "mime": "video/mp4",
+      "size_bytes": 13313229,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "duration_s": 271.88
     }
   ]
 }

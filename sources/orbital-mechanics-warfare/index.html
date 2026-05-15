@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Orbital Mechanics & Space Warfare — An Interactive Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-label="logo" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="16" cy="16" r="6"/>
+      <ellipse cx="16" cy="16" rx="14" ry="6" transform="rotate(-25 16 16)"/>
+      <circle cx="28.5" cy="10" r="1.4" fill="currentColor"/>
+    </svg>
+    <div>
+      <h1>Orbital Mechanics &amp; Space Warfare</h1>
+      <p class="subtitle">Why physics breaks every fighter pilot reflex in space</p>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="intro">Intro</button>
+    <button class="tab" data-tab="cw">Relative Motion</button>
+    <button class="tab" data-tab="lagrange">Lagrange Points</button>
+    <button class="tab" data-tab="los">Line-of-Sight</button>
+    <button class="tab" data-tab="transfer">Intercepts</button>
+  </nav>
+</header>
+
+<main id="stage">
+
+  <!-- INTRO -->
+  <section class="panel active" id="panel-intro">
+    <div class="hero">
+      <div class="hero-text">
+        <h2>Space is not the air, with a better view.</h2>
+        <p>It is celestial mechanics with weapons attached. Every reflex from atmospheric flight inverts the instant you reach orbit. Thrust forward, fall behind. Park on the high ground, slide off it. Light your engines hard, run out of fuel before you arrive.</p>
+        <p class="caption">Four interactive demonstrations of why orbital warfare is governed by physics, not firepower.</p>
+        <div class="cta-row">
+          <button class="cta" data-goto="cw">1. The Retrograde Paradox →</button>
+          <button class="cta" data-goto="lagrange">2. Unstable High Ground →</button>
+          <button class="cta" data-goto="los">3. 90 Minutes of Darkness →</button>
+          <button class="cta" data-goto="transfer">4. Patience vs. Pursuit →</button>
+        </div>
+      </div>
+      <div class="hero-vis">
+        <canvas id="heroCanvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 1: CW -->
+  <section class="panel" id="panel-cw">
+    <div class="module">
+      <div class="module-vis">
+        <canvas id="cwCanvas"></canvas>
+        <div class="hud" id="cwHud">
+          <div><span class="hud-label">Chaser ΔV</span><span class="hud-val" id="cwDv">0.0 m/s</span></div>
+          <div><span class="hud-label">Range</span><span class="hud-val" id="cwRange">5.0 km</span></div>
+          <div><span class="hud-label">Elapsed</span><span class="hud-val" id="cwTime">0 s</span></div>
+        </div>
+      </div>
+      <div class="module-text">
+        <span class="kicker">Module 01 · Clohessy–Wiltshire Equations</span>
+        <h2>Thrust forward. Fall behind.</h2>
+        <p>The chaser (cyan) sits five kilometers behind the target (amber). Both orbit at 400 km altitude. Instinct says: throttle forward to close the gap. Click <strong>Thrust Prograde</strong> and watch.</p>
+        <p>Adding velocity raises the chaser into a higher, slower orbit. Period lengthens. The chaser drifts backward in the local frame. To actually catch the target, you must thrust <em>retrograde</em>, drop into a faster lower orbit, then rise to meet it.</p>
+        <div class="controls">
+          <button class="btn ok" id="cwProgradeBtn">▲ Thrust Prograde (forward)</button>
+          <button class="btn warn" id="cwRetroBtn">▼ Thrust Retrograde (back)</button>
+          <button class="btn ghost" id="cwResetBtn">Reset</button>
+        </div>
+        <div class="footnote">Equations: Clohessy &amp; Wiltshire (1960). Target-centered LVLH frame, linearized for small separations.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 2: LAGRANGE -->
+  <section class="panel" id="panel-lagrange">
+    <div class="module">
+      <div class="module-vis">
+        <canvas id="lagrangeCanvas"></canvas>
+        <div class="hud" id="lagHud">
+          <div><span class="hud-label">Selected</span><span class="hud-val" id="lagSel">L1</span></div>
+          <div><span class="hud-label">Stability</span><span class="hud-val" id="lagStab">saddle (unstable)</span></div>
+          <div><span class="hud-label">Drift</span><span class="hud-val" id="lagDrift">0.0 km</span></div>
+        </div>
+      </div>
+      <div class="module-text">
+        <span class="kicker">Module 02 · Lagrange Points</span>
+        <h2>The high ground that slides away.</h2>
+        <p>Five points balance Earth–Moon gravity. Strategists call them cislunar high ground. But not all balance is equal. <strong>L1, L2, L3</strong> are saddle points: stable along one axis, unstable along another. <strong>L4 and L5</strong> sit at the bottom of effective potential wells, genuinely stable.</p>
+        <p>Click a point, then <strong>Perturb</strong> to nudge the spacecraft. Watch which ones come home and which ones drift forever. A weapons platform parked at L1 burns fuel just to exist.</p>
+        <div class="controls">
+          <button class="btn" data-lag="L1">L1</button>
+          <button class="btn" data-lag="L2">L2</button>
+          <button class="btn" data-lag="L3">L3</button>
+          <button class="btn" data-lag="L4">L4</button>
+          <button class="btn" data-lag="L5">L5</button>
+          <button class="btn warn" id="lagPerturbBtn">Perturb</button>
+          <button class="btn ghost" id="lagResetBtn">Reset</button>
+        </div>
+        <div class="footnote">Simplified circular restricted three-body problem. JWST orbits L2 with continuous station-keeping burns.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 3: LOS -->
+  <section class="panel" id="panel-los">
+    <div class="module">
+      <div class="module-vis">
+        <canvas id="losCanvas"></canvas>
+        <div class="hud" id="losHud">
+          <div><span class="hud-label">Orbit time</span><span class="hud-val" id="losT">00:00</span></div>
+          <div><span class="hud-label">Status</span><span class="hud-val" id="losStatus">ACQUIRED</span></div>
+          <div><span class="hud-label">Window</span><span class="hud-val" id="losWindow">0 / 6 passes</span></div>
+        </div>
+      </div>
+      <div class="module-text">
+        <span class="kicker">Module 03 · Line-of-Sight Windows</span>
+        <h2>Ninety minutes. Ten of them useful.</h2>
+        <p>A satellite in LEO completes one orbit every ~90 minutes. From any fixed ground station, the satellite is only above the horizon for roughly 10 minutes per pass. The rest of the time, Earth occults the link.</p>
+        <p>This simulation runs a compressed 90-minute orbit. The green sector marks line-of-sight to the ground station. Red marks occlusion. A defender has perhaps six brief engagement windows per day against any single LEO target.</p>
+        <div class="controls">
+          <button class="btn" id="losSpeed1">1×</button>
+          <button class="btn" id="losSpeed10">10×</button>
+          <button class="btn" id="losSpeed60">60×</button>
+          <button class="btn ghost" id="losResetBtn">Reset</button>
+        </div>
+        <div class="footnote">Single ground station, 400 km circular LEO, 5° minimum elevation mask. Real constellations relay around the gaps.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 4: TRANSFER -->
+  <section class="panel" id="panel-transfer">
+    <div class="module">
+      <div class="module-vis">
+        <canvas id="transferCanvas"></canvas>
+        <div class="hud hud-2col" id="transferHud">
+          <div><span class="hud-label hohmann">Hohmann ΔV</span><span class="hud-val" id="hohDv">— m/s</span></div>
+          <div><span class="hud-label hohmann">Hohmann time</span><span class="hud-val" id="hohTime">— min</span></div>
+          <div><span class="hud-label direct">Direct ΔV</span><span class="hud-val" id="dirDv">— m/s</span></div>
+          <div><span class="hud-label direct">Direct time</span><span class="hud-val" id="dirTime">— min</span></div>
+        </div>
+      </div>
+      <div class="module-text">
+        <span class="kicker">Module 04 · Hohmann vs. Direct Pursuit</span>
+        <h2>Patience beats brute force.</h2>
+        <p>Target orbits 1000 km above the interceptor. The <span class="cb hohmann">Hohmann transfer</span> uses two small burns, half an orbit apart, raising apogee then circularizing. Cheapest possible two-impulse maneuver.</p>
+        <p>The <span class="cb direct">direct intercept</span> burns radially toward the target. Fast, but bleeds enormous Δv and arrives with high closing velocity. Press <strong>Launch</strong> and watch both run simultaneously.</p>
+        <div class="controls">
+          <button class="btn ok" id="transferLaunchBtn">Launch both</button>
+          <button class="btn ghost" id="transferResetBtn">Reset</button>
+        </div>
+        <div class="footnote">Hohmann ≈ 60% less Δv than a direct radial burn for this scenario, at the cost of ~50 minutes vs. ~10.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>Built for Trevor · Master of Space Studies, UND</span>
+  <span class="sources">Sources: <a href="https://en.wikipedia.org/wiki/Clohessy%E2%80%93Wiltshire_equations">Clohessy–Wiltshire</a> · <a href="https://en.wikipedia.org/wiki/Hohmann_transfer_orbit">Hohmann transfer</a> · <a href="https://pwg.gsfc.nasa.gov/stargaze/Slagrng2.htm">NASA: Lagrange points</a> · <a href="https://ai-solutions.com/newsroom/l2-station-keeping-maneuver-strategy-for-the-james-webb-space-telescope/">JWST L2 station-keeping</a></span>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
