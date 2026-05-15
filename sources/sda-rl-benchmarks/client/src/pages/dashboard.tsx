@@ -43,6 +43,7 @@ import {
   GitCompareArrows,
   ArrowUpDown,
   Satellite,
+  ChevronLeft,
 } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 
@@ -171,6 +172,18 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              data-testid="button-back-to-lab"
+              className="gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <a href="../../" title="Back to perplexity-lab catalog">
+                <ChevronLeft className="h-4 w-4" />
+                Lab
+              </a>
+            </Button>
             <Button
               variant="outline"
               size="sm"

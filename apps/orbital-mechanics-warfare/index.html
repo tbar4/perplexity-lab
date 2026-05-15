@@ -170,5 +170,92 @@
 </footer>
 
 <script type="module" src="js/main.js"></script>
+<!-- BEGIN_PPLX_LAB_HOME -->
+<style>
+  #__pplx_lab_home {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 2147483647;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    padding: 6px 11px 6px 9px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+  }
+  #__pplx_lab_home:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+  }
+  #__pplx_lab_home svg {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    #__pplx_lab_home {
+      color: #e8e8ec;
+      background: rgba(20, 20, 24, 0.7);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+    #__pplx_lab_home:hover {
+      background: rgba(28, 28, 34, 0.92);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+  }
+  /* If the host app marks itself dark via class, follow that too */
+  html.dark #__pplx_lab_home,
+  body.dark #__pplx_lab_home,
+  [data-theme="dark"] #__pplx_lab_home {
+    color: #e8e8ec;
+    background: rgba(20, 20, 24, 0.7);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+  html.dark #__pplx_lab_home:hover,
+  body.dark #__pplx_lab_home:hover,
+  [data-theme="dark"] #__pplx_lab_home:hover {
+    background: rgba(28, 28, 34, 0.92);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  @media print {
+    #__pplx_lab_home { display: none; }
+  }
+</style>
+<a id="__pplx_lab_home" href="/perplexity-lab/" title="Back to perplexity-lab catalog">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M9.5 4 5.5 8l4 4" />
+  </svg>
+  Lab
+</a>
+<script>
+  // If the page isn't served from /perplexity-lab/ (e.g. local preview at /apps/<id>/),
+  // rewrite the href to a relative path that works there too.
+  (function () {
+    var a = document.getElementById('__pplx_lab_home');
+    if (!a) return;
+    var p = window.location.pathname;
+    if (p.indexOf('/perplexity-lab/') === -1) {
+      // Local preview or alternative host: walk up to repo root
+      var depth = (p.match(/\//g) || []).length - 1;
+      if (depth > 0) a.setAttribute('href', '../'.repeat(depth));
+    }
+  })();
+</script>
+<!-- END_PPLX_LAB_HOME -->
+
 </body>
 </html>
