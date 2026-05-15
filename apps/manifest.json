@@ -78,6 +78,29 @@
       "built_at": "2026-05-15",
       "file": "apps/sda-rl-benchmarks/index.html",
       "source": "sources/sda-rl-benchmarks/"
+      "id": "rl-wargaming-survey",
+      "type": "doc",
+      "title": "RL in Wargames and Military Simulations",
+      "subtitle": "Methods, case studies, and DoD outlook (2020 to 2026)",
+      "description": "14-page survey of reinforcement learning in DoD wargaming and military simulation. Covers AlphaDogfight, DARPA ACE on X-62A, Gamebreaker, SCEPTER, NPS hierarchical RL, the U.S. Army CGSC AI wargame, DIU Thunderforge, and USAF WarMatrix, with a 12-system comparison table, success metrics, persistent challenges, and a future outlook for 2026 to 2030.",
+      "path": "apps/rl-wargaming-survey/",
+      "thumbnail": "apps/rl-wargaming-survey/thumbnail.png",
+      "tags": [
+        "military",
+        "wargaming",
+        "reinforcement-learning",
+        "dod",
+        "research"
+      ],
+      "tech": [
+        "ReportLab",
+        "Python"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/rl-wargaming-survey/RL_Wargames_Military_Simulations_2020-2026.pdf",
+      "mime": "application/pdf",
+      "size_bytes": 69345,
+      "pages": 14
     }
   ]
 }
