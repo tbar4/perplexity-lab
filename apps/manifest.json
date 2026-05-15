@@ -77,7 +77,8 @@
         "Static HTML"
       ],
       "built_at": "2026-05-15",
-      "file": "apps/sda-rl-benchmarks/index.html"
+      "file": "apps/sda-rl-benchmarks/index.html",
+      "source": "sources/sda-rl-benchmarks/"
     },
     {
       "id": "rl-wargaming-survey",
@@ -103,6 +104,33 @@
       "mime": "application/pdf",
       "size_bytes": 69345,
       "pages": 14
+    },
+    {
+      "id": "satellite-conjunction-pizza-box",
+      "type": "image",
+      "title": "Satellite Conjunction Assessment: Pizza Box Screening Volume",
+      "subtitle": "In-track / cross-track / radial screening volume around a primary satellite",
+      "description": "Illustration of the standard 'pizza box' screening volume used in satellite conjunction assessment. Shows the primary object at center with a screening box sized T = 44 km in-track and N = 51 km cross-track, plus a radial (R) buffer, set against the trajectories of a primary and a secondary object near Earth.",
+      "path": "apps/satellite-conjunction-pizza-box/",
+      "thumbnail": "apps/satellite-conjunction-pizza-box/thumbnail.png",
+      "tags": [
+        "space",
+        "sda",
+        "conjunction-assessment",
+        "orbital-mechanics",
+        "diagram"
+      ],
+      "tech": [
+        "illustration"
+      ],
+      "built_at": "2026-05-15",
+      "file": "apps/satellite-conjunction-pizza-box/image.jpg",
+      "mime": "image/jpeg",
+      "size_bytes": 454200,
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      }
     }
   ]
 }
