@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Perplexity Lab — apps built by Computer</title>
-    <meta name="description" content="A catalog of interactive web apps built by Perplexity Computer for Trevor." />
+    <title>Perplexity Lab — artifacts built by Computer</title>
+    <meta name="description" content="A catalog of interactive apps, documents, images, notebooks, datasets, and videos built by Perplexity Computer for Trevor." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2306b6d4'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://rsms.me/" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
@@ -21,6 +21,8 @@
         --cyan: #22d3ee;
         --amber: #fbbf24;
         --violet: #a78bfa;
+        --green: #10b981;
+        --rose: #fb7185;
         --accent: var(--cyan);
       }
       * { box-sizing: border-box; }
@@ -71,7 +73,7 @@
       h2.title .accent { background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
       .lede { color: var(--text-dim); font-size: 17px; line-height: 1.6; max-width: 720px; margin: 0; }
 
-      section.stats { padding: 24px 0 48px; }
+      section.stats { padding: 24px 0 32px; }
       .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
       .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
       .stat .label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
@@ -80,11 +82,29 @@
       .stat.amber .value { color: var(--amber); }
       .stat.violet .value { color: var(--violet); }
 
-      section.apps { padding: 24px 0 96px; }
-      .apps-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
-      .apps-head h3 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); }
-      .apps-head .filter { font-size: 12px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .tabs-wrap { padding: 8px 0 24px; }
+      .tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+      .tab {
+        padding: 10px 14px; font-size: 13px; font-weight: 500;
+        color: var(--text-dim); border: none; background: transparent;
+        cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+        font-family: inherit; display: flex; align-items: center; gap: 8px;
+      }
+      .tab:hover { color: var(--text); }
+      .tab.active { color: var(--text); border-bottom-color: var(--cyan); }
+      .tab .count { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+      .tab.active .count { background: rgba(34, 211, 238, 0.12); border-color: rgba(34, 211, 238, 0.3); color: var(--cyan); }
 
+      .search-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; }
+      .search {
+        background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+        padding: 8px 14px; font-size: 13px; color: var(--text);
+        font-family: inherit; width: 320px; max-width: 100%;
+      }
+      .search:focus { outline: none; border-color: var(--border-strong); }
+      .filter-summary { font-size: 12px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      section.apps { padding: 0 0 96px; }
       .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 420px)); gap: 20px; justify-content: start; }
       .card {
         background: var(--bg-card);
@@ -93,22 +113,38 @@
         overflow: hidden;
         transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
         display: flex; flex-direction: column;
+        position: relative;
       }
       .card:hover {
         transform: translateY(-2px);
         border-color: var(--border-strong);
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
       }
+      .type-badge {
+        position: absolute; top: 10px; left: 10px; z-index: 2;
+        font-size: 10px; padding: 4px 8px; border-radius: 6px;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500;
+        backdrop-filter: blur(6px);
+      }
+      .type-badge.app { background: rgba(34, 211, 238, 0.15); color: var(--cyan); border: 1px solid rgba(34, 211, 238, 0.3); }
+      .type-badge.doc { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251, 191, 36, 0.3); }
+      .type-badge.image { background: rgba(167, 139, 250, 0.15); color: var(--violet); border: 1px solid rgba(167, 139, 250, 0.3); }
+      .type-badge.notebook { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+      .type-badge.dataset { background: rgba(251, 113, 133, 0.15); color: var(--rose); border: 1px solid rgba(251, 113, 133, 0.3); }
+      .type-badge.video { background: rgba(232, 232, 236, 0.15); color: var(--text); border: 1px solid rgba(232, 232, 236, 0.3); }
+
       .thumb-link { display: block; }
       .card-title-link { color: inherit; }
       .thumb { aspect-ratio: 16 / 10; background: var(--bg-elev); border-bottom: 1px solid var(--border); overflow: hidden; position: relative; }
       .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
       .thumb-placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.02) 8px, rgba(255,255,255,0.02) 16px); }
       .card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
-      .card-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+      .card-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
       .card-title { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
       .card-subtitle { font-size: 12px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; }
       .card-desc { color: var(--text-dim); font-size: 13px; line-height: 1.55; margin: 6px 0 14px; }
+      .card-meta-row { display: flex; gap: 12px; font-size: 11px; color: var(--text-faint); font-family: "JetBrains Mono", ui-monospace, monospace; margin-bottom: 12px; flex-wrap: wrap; }
       .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
       .tag { font-size: 10px; padding: 3px 8px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.04em; text-transform: uppercase; font-family: "JetBrains Mono", ui-monospace, monospace; }
       .card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
@@ -118,6 +154,7 @@
         font-size: 12px; padding: 6px 12px; border-radius: 8px;
         background: transparent; border: 1px solid var(--border-strong); color: var(--text);
         cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease;
+        text-decoration: none; display: inline-block;
       }
       .btn:hover { background: var(--bg-elev); border-color: #3a3a44; }
       .btn.primary { background: var(--cyan); color: #0a0a0b; border-color: var(--cyan); font-weight: 500; }
@@ -132,6 +169,8 @@
         section.hero { padding: 48px 0 32px; }
         h2.title { font-size: 32px; }
         .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .search { width: 100%; }
+        .search-row { flex-direction: column; align-items: stretch; }
       }
     </style>
   </head>
@@ -142,7 +181,7 @@
           <div class="logo">P</div>
           <div class="brand-text">
             <h1>Perplexity Lab</h1>
-            <p>Apps built by Computer · for Trevor</p>
+            <p>Artifacts built by Computer · for Trevor</p>
           </div>
         </a>
         <div class="top-meta">
@@ -155,18 +194,18 @@
     <main>
       <section class="hero">
         <div class="container">
-          <div class="eyebrow">v0.1 · A growing catalog</div>
-          <h2 class="title">Every app <span class="accent">Computer</span> builds, in one place.</h2>
-          <p class="lede">Interactive dashboards, research tools, and visualizations. Each app is pre-built, deployed as static files, and lives at its own URL under this site.</p>
+          <div class="eyebrow">v0.2 · Multi-artifact catalog</div>
+          <h2 class="title">Everything <span class="accent">Computer</span> builds, in one place.</h2>
+          <p class="lede">Interactive apps, documents, images, notebooks, datasets, and videos. Each artifact is pre-built, deployed as static files, and lives at its own URL under this site.</p>
         </div>
       </section>
 
       <section class="stats">
         <div class="container">
           <div class="stats-grid">
-            <div class="stat cyan"><div class="label">Apps deployed</div><div class="value" id="stat-count">—</div></div>
+            <div class="stat cyan"><div class="label">Total artifacts</div><div class="value" id="stat-count">—</div></div>
             <div class="stat amber"><div class="label">Latest build</div><div class="value" id="stat-latest" style="font-size:18px">—</div></div>
-            <div class="stat violet"><div class="label">Tech families</div><div class="value" id="stat-tech" style="font-size:18px">—</div></div>
+            <div class="stat violet"><div class="label">Types active</div><div class="value" id="stat-types" style="font-size:18px">—</div></div>
             <div class="stat"><div class="label">Hosted on</div><div class="value" style="font-size:18px">GitHub Pages</div></div>
           </div>
         </div>
@@ -174,9 +213,12 @@
 
       <section class="apps">
         <div class="container">
-          <div class="apps-head">
-            <h3>Catalog</h3>
-            <div class="filter" id="filter-summary"></div>
+          <div class="tabs-wrap">
+            <div class="tabs" id="tabs"></div>
+            <div class="search-row">
+              <input class="search" id="search" type="search" placeholder="Search title, description, tags…" />
+              <div class="filter-summary" id="filter-summary"></div>
+            </div>
           </div>
           <div class="apps-grid" id="apps-grid"></div>
         </div>
@@ -191,6 +233,16 @@
     </footer>
 
     <script>
+      const TYPES = [
+        { id: 'all',      label: 'All' },
+        { id: 'app',      label: 'Apps' },
+        { id: 'doc',      label: 'Documents' },
+        { id: 'image',    label: 'Images' },
+        { id: 'notebook', label: 'Notebooks' },
+        { id: 'dataset',  label: 'Datasets' },
+        { id: 'video',    label: 'Videos' },
+      ];
+
       function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
       }
@@ -200,58 +252,154 @@
         if (Number.isNaN(d.getTime())) return s;
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       }
+      function fmtBytes(n) {
+        if (!n && n !== 0) return '';
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        if (n < 1024 * 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + ' MB';
+        return (n / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+      }
+      function fmtDuration(s) {
+        if (!s && s !== 0) return '';
+        const total = Math.round(s);
+        const m = Math.floor(total / 60);
+        const sec = total % 60;
+        return m + ':' + String(sec).padStart(2, '0');
+      }
+      function typeMeta(a) {
+        const t = a.type || 'app';
+        const bits = [];
+        if (t === 'doc' && a.pages) bits.push(a.pages + ' page' + (a.pages === 1 ? '' : 's'));
+        if (t === 'image' && a.dimensions) bits.push(a.dimensions.width + '×' + a.dimensions.height);
+        if (t === 'video' && a.duration_s) bits.push(fmtDuration(a.duration_s));
+        if (t === 'video' && a.dimensions) bits.push(a.dimensions.width + '×' + a.dimensions.height);
+        if (t === 'dataset' && a.rows) bits.push(a.rows.toLocaleString() + ' rows');
+        if (t === 'dataset' && a.columns) bits.push(a.columns + ' cols');
+        if (a.size_bytes) bits.push(fmtBytes(a.size_bytes));
+        return bits;
+      }
+      function primaryAction(a) {
+        const t = a.type || 'app';
+        const target = a.file ? a.file : a.path;
+        const label = ({
+          app: 'Open →',
+          doc: 'View PDF →',
+          image: 'View →',
+          notebook: 'Open →',
+          dataset: 'Download',
+          video: 'Watch →',
+        })[t] || 'Open →';
+        return '<a class="btn primary" href="' + escapeHtml(target) + '"' +
+          (t === 'dataset' ? ' download' : '') + '>' + label + '</a>';
+      }
+
+      let ALL = [];
+      let activeType = 'all';
+      let query = '';
+
+      function matches(a) {
+        if (activeType !== 'all' && (a.type || 'app') !== activeType) return false;
+        if (!query) return true;
+        const hay = [
+          a.title, a.subtitle, a.description,
+          (a.tags || []).join(' '),
+          (a.tech || []).join(' '),
+        ].filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(query.toLowerCase());
+      }
+
+      function renderTabs(counts) {
+        const tabs = document.getElementById('tabs');
+        tabs.innerHTML = TYPES.map(t => {
+          const c = t.id === 'all' ? ALL.length : (counts[t.id] || 0);
+          if (t.id !== 'all' && c === 0) return '';
+          return '<button class="tab ' + (activeType === t.id ? 'active' : '') + '" data-type="' + t.id + '">' +
+            escapeHtml(t.label) + '<span class="count">' + c + '</span></button>';
+        }).join('');
+        tabs.querySelectorAll('.tab').forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeType = btn.dataset.type;
+            render();
+          });
+        });
+      }
+
+      function render() {
+        const grid = document.getElementById('apps-grid');
+        const counts = {};
+        ALL.forEach(a => { const t = a.type || 'app'; counts[t] = (counts[t] || 0) + 1; });
+        renderTabs(counts);
+
+        const filtered = ALL.filter(matches);
+        document.getElementById('filter-summary').textContent =
+          filtered.length + ' of ' + ALL.length + ' artifact' + (ALL.length === 1 ? '' : 's');
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '<div class="empty">Nothing matches that filter.</div>';
+          return;
+        }
+
+        grid.innerHTML = filtered.map(app => {
+          const type = app.type || 'app';
+          const thumb = app.thumbnail
+            ? '<img loading="lazy" src="' + escapeHtml(app.thumbnail) + '" alt="' + escapeHtml(app.title) + ' preview" />'
+            : '<div class="thumb-placeholder">no preview</div>';
+          const tags = (app.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
+          const sourceLink = app.source ? '<a class="btn" href="' + escapeHtml(app.source) + '" target="_blank" rel="noopener">Source</a>' : '';
+          const detailLink = app.file ? app.file : app.path;
+          const metaBits = typeMeta(app);
+          const metaRow = metaBits.length
+            ? '<div class="card-meta-row">' + metaBits.map(b => '<span>' + escapeHtml(b) + '</span>').join(' · ') + '</div>'
+            : '';
+          return [
+            '<article class="card">',
+            '  <span class="type-badge ' + type + '">' + escapeHtml(type) + '</span>',
+            '  <a class="thumb-link" href="' + escapeHtml(detailLink) + '" aria-label="Open ' + escapeHtml(app.title) + '">',
+            '    <div class="thumb">' + thumb + '</div>',
+            '  </a>',
+            '  <div class="card-body">',
+            '    <a class="card-title-link" href="' + escapeHtml(detailLink) + '">',
+            '      <div class="card-title-row">',
+            '        <div class="card-title">' + escapeHtml(app.title) + '</div>',
+            app.subtitle ? '        <div class="card-subtitle">' + escapeHtml(app.subtitle) + '</div>' : '',
+            '      </div>',
+            '    </a>',
+            app.description ? '    <div class="card-desc">' + escapeHtml(app.description) + '</div>' : '',
+            metaRow,
+            tags ? '    <div class="card-tags">' + tags + '</div>' : '',
+            '    <div class="card-foot">',
+            '      <span class="meta">' + (app.built_at ? fmtDate(app.built_at) : '') + '</span>',
+            '      <div class="actions">',
+            sourceLink,
+            '        ' + primaryAction(app),
+            '      </div>',
+            '    </div>',
+            '  </div>',
+            '</article>'
+          ].filter(Boolean).join('\n');
+        }).join('');
+      }
+
       async function load() {
         const grid = document.getElementById('apps-grid');
         try {
           const res = await fetch('apps/manifest.json', { cache: 'no-cache' });
           if (!res.ok) throw new Error('manifest fetch failed: ' + res.status);
           const data = await res.json();
-          const apps = (data.apps || []).slice().sort((a, b) => (b.built_at || '').localeCompare(a.built_at || ''));
+          ALL = (data.apps || []).slice().sort((a, b) => (b.built_at || '').localeCompare(a.built_at || ''));
 
-          document.getElementById('stat-count').textContent = apps.length;
-          const latest = apps[0]?.built_at ? fmtDate(apps[0].built_at) : '—';
+          document.getElementById('stat-count').textContent = ALL.length;
+          const latest = ALL[0]?.built_at ? fmtDate(ALL[0].built_at) : '—';
           document.getElementById('stat-latest').textContent = latest;
-          const tech = new Set();
-          apps.forEach(a => (a.tech || []).forEach(t => tech.add(t)));
-          document.getElementById('stat-tech').textContent = tech.size || '—';
-          document.getElementById('filter-summary').textContent = apps.length + ' app' + (apps.length === 1 ? '' : 's');
+          const types = new Set(ALL.map(a => a.type || 'app'));
+          document.getElementById('stat-types').textContent = types.size || '—';
 
-          if (apps.length === 0) {
-            grid.innerHTML = '<div class="empty">No apps yet. Come back soon.</div>';
-            return;
-          }
+          document.getElementById('search').addEventListener('input', e => {
+            query = e.target.value.trim();
+            render();
+          });
 
-          grid.innerHTML = apps.map(app => {
-            const thumb = app.thumbnail
-              ? '<img loading="lazy" src="' + escapeHtml(app.thumbnail) + '" alt="' + escapeHtml(app.title) + ' preview" />'
-              : '<div class="thumb-placeholder">no preview</div>';
-            const tags = (app.tags || []).map(t => '<span class="tag">' + escapeHtml(t) + '</span>').join('');
-            const sourceLink = app.source ? '<a class="btn" href="' + escapeHtml(app.source) + '" target="_blank" rel="noopener">Source</a>' : '';
-            return [
-              '<article class="card" data-href="' + escapeHtml(app.path) + '">',
-              '  <a class="thumb-link" href="' + escapeHtml(app.path) + '" aria-label="Open ' + escapeHtml(app.title) + '">',
-              '    <div class="thumb">' + thumb + '</div>',
-              '  </a>',
-              '  <div class="card-body">',
-              '    <a class="card-title-link" href="' + escapeHtml(app.path) + '">',
-              '      <div class="card-title-row">',
-              '        <div class="card-title">' + escapeHtml(app.title) + '</div>',
-              app.subtitle ? '        <div class="card-subtitle">' + escapeHtml(app.subtitle) + '</div>' : '',
-              '      </div>',
-              '    </a>',
-              app.description ? '    <div class="card-desc">' + escapeHtml(app.description) + '</div>' : '',
-              tags ? '    <div class="card-tags">' + tags + '</div>' : '',
-              '    <div class="card-foot">',
-              '      <span class="meta">' + (app.built_at ? fmtDate(app.built_at) : '') + '</span>',
-              '      <div class="actions">',
-              sourceLink,
-              '        <a class="btn primary" href="' + escapeHtml(app.path) + '">Open →</a>',
-              '      </div>',
-              '    </div>',
-              '  </div>',
-              '</article>'
-            ].join('\n');
-          }).join('');
+          render();
         } catch (e) {
           grid.innerHTML = '<div class="empty">Failed to load manifest: ' + escapeHtml(e.message) + '</div>';
         }

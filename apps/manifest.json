@@ -4,6 +4,7 @@
   "apps": [
     {
       "id": "planning-lab",
+      "type": "app",
       "title": "Planning Lab",
       "subtitle": "RL vs Transformer Bench",
       "description": "Interactive comparison of reinforcement learning and transformer next-token prediction for strategic planning, anchored to primary arXiv papers from 2017 to 2026.",
@@ -22,10 +23,12 @@
         "Recharts",
         "Tailwind"
       ],
-      "built_at": "2026-05-15"
+      "built_at": "2026-05-15",
+      "file": "apps/planning-lab/index.html"
     },
     {
       "id": "sda-rl-bench",
+      "type": "app",
       "title": "SDA\u00b7RL Benchmark Index",
       "subtitle": "Space Domain Awareness \u00d7 Reinforcement Learning",
       "description": "A live, filterable comparison of every reinforcement-learning benchmark in the Space Domain Awareness literature \u2014 narrow-FOV SSA environments, OrbitZoo, NORAD TLE agents, Space-Track ephemeris pipelines, Starlink validation, BSK-RL, KSPDG, SPLID \u2014 with side-by-side notes on strengths, limitations, and reproducibility.",
@@ -46,7 +49,8 @@
         "Tailwind",
         "shadcn/ui"
       ],
-      "built_at": "2026-05-15"
+      "built_at": "2026-05-15",
+      "file": "apps/sda-rl-bench/index.html"
     }
   ]
 }
