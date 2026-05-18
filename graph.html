@@ -104,6 +104,22 @@ let filter = "";
     row.append("span").text(k);
   });
 
+  // Force simulation has to exist BEFORE we wire up node + drag.
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d=>d.id).distance(80).strength(0.3))
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("center", d3.forceCenter(w/2, h/2))
+    .force("collide", d3.forceCollide().radius(d => 8 + Math.min(10, (d.in_count||0)*1.2)));
+
+  function drag(simulation){
+    return d3.drag()
+      .on("start", (e,d)=>{ if(!e.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on("drag", (e,d)=>{ d.fx=e.x; d.fy=e.y; })
+      .on("end", (e,d)=>{ if(!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; });
+  }
+
+  function safeEscape(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
   const link = container.append("g").attr("class","links").selectAll("line")
     .data(links).join("line")
     .attr("class","link")
@@ -112,7 +128,7 @@ let filter = "";
 
   const node = container.append("g").attr("class","nodes").selectAll("g.node")
     .data(nodes).join("g").attr("class","node")
-    .call(drag(simulation()));
+    .call(drag(sim));
 
   node.append("circle")
     .attr("r", d => 4 + Math.min(10, (d.in_count || 0) * 1.2))
@@ -130,33 +146,25 @@ let filter = "";
     tip.style("opacity", 1)
       .style("left", (e.pageX + 12) + "px")
       .style("top", (e.pageY + 12) + "px")
-      .html(`<strong>${escape(d.title)}</strong><br><span style="color:#6a6a74">${d.type || "—"} · ${d.out_count||0} out · ${d.in_count||0} in</span>`);
+      .html(`<strong>${safeEscape(d.title)}</strong><br><span style="color:#6a6a74">${d.type || "—"} · ${d.out_count||0} out · ${d.in_count||0} in</span>`);
   });
   node.on("mousemove", e => tip.style("left", (e.pageX+12)+"px").style("top", (e.pageY+12)+"px"));
   node.on("mouseout", () => tip.style("opacity", 0));
 
-  function escape(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
-
-  const sim = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d=>d.id).distance(80).strength(0.3))
-    .force("charge", d3.forceManyBody().strength(-200))
-    .force("center", d3.forceCenter(w/2, h/2))
-    .force("collide", d3.forceCollide().radius(d => 8 + Math.min(10, (d.in_count||0)*1.2)))
-    .on("tick", ticked);
-
-  function ticked(){
+  sim.on("tick", () => {
     link.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y)
         .attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
     node.attr("transform", d=>`translate(${d.x},${d.y})`);
-  }
+  });
 
-  function simulation(){ return sim; }
-  function drag(simulation){
-    return d3.drag()
-      .on("start", (e,d)=>{ if(!e.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
-      .on("drag", (e,d)=>{ d.fx=e.x; d.fy=e.y; })
-      .on("end", (e,d)=>{ if(!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; });
-  }
+  // Kick the simulation in case it stalled (defensive).
+  sim.alpha(1).restart();
+
+  // Recenter on window resize.
+  window.addEventListener("resize", () => {
+    const w2 = svg.node().clientWidth, h2 = svg.node().clientHeight;
+    sim.force("center", d3.forceCenter(w2/2, h2/2)).alpha(0.3).restart();
+  });
 
   document.getElementById("search").addEventListener("input", e => { filter = e.target.value.trim().toLowerCase(); update(); });
 
