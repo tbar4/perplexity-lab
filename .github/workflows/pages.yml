@@ -24,14 +24,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build deps
+        run: pip install pyyaml markdown-it-py jsonschema
+
+      - name: Build Zettelkasten notes
+        run: python3 scripts/build_notes.py
+
       - name: Stage site
         run: |
           mkdir -p _site
           cp index.html _site/
+          cp notes.html _site/
+          cp graph.html _site/
           cp -r apps _site/
-          # Don't ship the sources/ tree to Pages — it's source-only.
-          # If you want sources browsable on the site too, uncomment:
-          # cp -r sources _site/
+          if [ -d notes ]; then cp -r notes _site/; fi
+          # sources/ is intentionally not shipped to Pages.
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -6,3 +6,5 @@ node_modules/
 sources/*/node_modules/
 sources/*/dist/
 _site/
+# Built notes output is regenerated on every Pages deploy.
+/notes/

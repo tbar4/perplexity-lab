@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Graph · Trevor Barnes · Thesis</title>
+<link rel="stylesheet" href="./notes/note.css" />
+<style>
+  body, html { height: 100%; overflow: hidden; }
+  .graph-wrap { position: absolute; inset: 64px 0 0 0; }
+  svg.graph { width: 100%; height: 100%; display: block; background: var(--bg); }
+  .legend { position: absolute; top: 16px; right: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 11px; font-family: ui-monospace, monospace; color: var(--text-dim); }
+  .legend h3 { margin: 0 0 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); font-weight: 500; }
+  .legend .row { display: flex; align-items: center; gap: 8px; margin: 4px 0; cursor: pointer; }
+  .legend .row.off { opacity: 0.35; }
+  .legend .swatch { width: 14px; height: 3px; border-radius: 2px; }
+  .controls { position: absolute; top: 16px; left: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--text-dim); font-family: ui-monospace, monospace; }
+  .controls input { background: transparent; border: none; color: var(--text); font: inherit; padding: 4px 6px; outline: none; width: 200px; }
+  .controls input::placeholder { color: var(--text-faint); }
+  .node-label { font-size: 11px; fill: var(--text-dim); font-family: -apple-system, system-ui, sans-serif; pointer-events: none; }
+  .node circle { stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+  .node:hover circle { stroke: var(--text); }
+  .node.active circle { stroke: var(--text); stroke-width: 2; }
+  .link { stroke-opacity: 0.5; fill: none; }
+  .link.dim { stroke-opacity: 0.08; }
+  .tooltip { position: absolute; background: var(--bg-card); border: 1px solid var(--border-strong); padding: 8px 12px; border-radius: 8px; font-size: 12px; pointer-events: none; opacity: 0; transition: opacity 0.1s; max-width: 240px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="container top-row">
+    <a class="brand" href="./">
+      <div class="logo">T</div>
+      <div class="brand-text">
+        <h1>Trevor Barnes · Thesis</h1>
+        <p>Space Studies · UND</p>
+      </div>
+    </a>
+    <nav class="top-nav">
+      <a href="./">Home</a>
+      <a href="./notes.html">Notes</a>
+      <a href="./graph.html" aria-current="page" style="color:var(--text)">Graph</a>
+      <a href="https://github.com/tbar4/perplexity-lab" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+<div class="graph-wrap">
+  <div class="controls">
+    <input id="search" type="search" placeholder="Filter by title or tag…" />
+  </div>
+  <div class="legend" id="legend"></div>
+  <svg class="graph" id="graph"></svg>
+  <div class="tooltip" id="tooltip"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+const CLUSTER_COLOR = { evidential: "#22d3ee", structural: "#a78bfa", interrogative: "#fbbf24", associative: "#6a6a74" };
+const TYPE_COLOR = {
+  permanent: "#22d3ee", literature: "#fbbf24", hub: "#a78bfa", source: "#fb7185", fleeting: "#6a6a74",
+};
+
+const LINK_TYPES = ["references","elaborates","supports","contradicts","example_of","defines","questions","derived_from","related"];
+let activeClusters = { evidential: true, structural: true, interrogative: true, associative: true };
+let filter = "";
+
+(async function(){
+  const r = await fetch("./notes/index.json", { cache: "no-cache" });
+  if(!r.ok){
+    document.getElementById("graph").outerHTML = '<div style="padding:48px; color:#6a6a74; text-align:center;">No notes yet.</div>';
+    return;
+  }
+  const data = await r.json();
+  if(!data.notes.length){
+    document.getElementById("graph").outerHTML = '<div style="padding:48px; color:#6a6a74; text-align:center;">No notes yet.</div>';
+    return;
+  }
+
+  const nodes = data.notes.map(n => ({ ...n }));
+  const links = data.edges.map(e => ({ source: e.from, target: e.to, type: e.type, cluster: e.cluster }));
+
+  const svg = d3.select("#graph");
+  const w = svg.node().clientWidth, h = svg.node().clientHeight;
+
+  const container = svg.append("g");
+  svg.call(d3.zoom().scaleExtent([0.2, 4]).on("zoom", e => container.attr("transform", e.transform)));
+
+  // Build legend
+  const legend = d3.select("#legend");
+  legend.append("h3").text("Link cluster");
+  Object.entries(CLUSTER_COLOR).forEach(([k, c]) => {
+    const row = legend.append("div").attr("class","row").attr("data-cluster", k)
+      .on("click", function(){
+        activeClusters[k] = !activeClusters[k];
+        d3.select(this).classed("off", !activeClusters[k]);
+        update();
+      });
+    row.append("div").attr("class","swatch").style("background", c);
+    row.append("span").text(k);
+  });
+  legend.append("h3").style("margin-top","14px").text("Note type");
+  Object.entries(TYPE_COLOR).forEach(([k, c]) => {
+    const row = legend.append("div").attr("class","row");
+    row.append("div").attr("class","swatch").style("background", c).style("height","10px").style("width","10px").style("border-radius","50%");
+    row.append("span").text(k);
+  });
+
+  const link = container.append("g").attr("class","links").selectAll("line")
+    .data(links).join("line")
+    .attr("class","link")
+    .attr("stroke", d => CLUSTER_COLOR[d.cluster] || "#6a6a74")
+    .attr("stroke-width", 1.3);
+
+  const node = container.append("g").attr("class","nodes").selectAll("g.node")
+    .data(nodes).join("g").attr("class","node")
+    .call(drag(simulation()));
+
+  node.append("circle")
+    .attr("r", d => 4 + Math.min(10, (d.in_count || 0) * 1.2))
+    .attr("fill", d => TYPE_COLOR[d.type] || "#6a6a74");
+
+  node.append("text")
+    .attr("class","node-label")
+    .attr("dx", 10).attr("dy", 4)
+    .text(d => d.title);
+
+  node.on("click", (e,d) => { window.location.href = d.path; });
+
+  const tip = d3.select("#tooltip");
+  node.on("mouseover", (e,d) => {
+    tip.style("opacity", 1)
+      .style("left", (e.pageX + 12) + "px")
+      .style("top", (e.pageY + 12) + "px")
+      .html(`<strong>${escape(d.title)}</strong><br><span style="color:#6a6a74">${d.type || "—"} · ${d.out_count||0} out · ${d.in_count||0} in</span>`);
+  });
+  node.on("mousemove", e => tip.style("left", (e.pageX+12)+"px").style("top", (e.pageY+12)+"px"));
+  node.on("mouseout", () => tip.style("opacity", 0));
+
+  function escape(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d=>d.id).distance(80).strength(0.3))
+    .force("charge", d3.forceManyBody().strength(-200))
+    .force("center", d3.forceCenter(w/2, h/2))
+    .force("collide", d3.forceCollide().radius(d => 8 + Math.min(10, (d.in_count||0)*1.2)))
+    .on("tick", ticked);
+
+  function ticked(){
+    link.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y)
+        .attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
+    node.attr("transform", d=>`translate(${d.x},${d.y})`);
+  }
+
+  function simulation(){ return sim; }
+  function drag(simulation){
+    return d3.drag()
+      .on("start", (e,d)=>{ if(!e.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on("drag", (e,d)=>{ d.fx=e.x; d.fy=e.y; })
+      .on("end", (e,d)=>{ if(!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; });
+  }
+
+  document.getElementById("search").addEventListener("input", e => { filter = e.target.value.trim().toLowerCase(); update(); });
+
+  function update(){
+    link.classed("dim", d => !activeClusters[d.cluster]);
+    node.style("opacity", d => {
+      if(filter && !((d.title + " " + (d.tags||[]).join(" ")).toLowerCase().includes(filter))) return 0.15;
+      return 1;
+    });
+  }
+})();
+</script>
+</body>
+</html>

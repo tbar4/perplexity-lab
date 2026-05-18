@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Perplexity Lab — artifacts built by Computer</title>
-    <meta name="description" content="A catalog of interactive apps, documents, images, notebooks, datasets, and videos built by Perplexity Computer for Trevor." />
+    <title>Trevor Barnes · Thesis</title>
+    <meta name="description" content="Notes, experiments, and artifacts toward a master's in Space Studies at the University of North Dakota. Zettelkasten + research catalog." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2306b6d4'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://rsms.me/" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
@@ -133,6 +133,7 @@
       .type-badge.notebook { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
       .type-badge.dataset { background: rgba(251, 113, 133, 0.15); color: var(--rose); border: 1px solid rgba(251, 113, 133, 0.3); }
       .type-badge.video { background: rgba(232, 232, 236, 0.15); color: var(--text); border: 1px solid rgba(232, 232, 236, 0.3); }
+      .type-badge.note { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
 
       .thumb-link { display: block; }
       .card-title-link { color: inherit; }
@@ -178,13 +179,15 @@
     <header class="top">
       <div class="container top-row">
         <a class="brand" href="./">
-          <div class="logo">P</div>
+          <div class="logo">T</div>
           <div class="brand-text">
-            <h1>Perplexity Lab</h1>
-            <p>Artifacts built by Computer · for Trevor</p>
+            <h1>Trevor Barnes · Thesis</h1>
+            <p>Space Studies · University of North Dakota</p>
           </div>
         </a>
         <div class="top-meta">
+          <a href="./notes.html">Notes</a>
+          <a href="./graph.html">Graph</a>
           <span><span class="pulse"></span>Live</span>
           <a href="https://github.com/tbar4/perplexity-lab" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
@@ -194,9 +197,9 @@
     <main>
       <section class="hero">
         <div class="container">
-          <div class="eyebrow">v0.2 · Multi-artifact catalog</div>
-          <h2 class="title">Everything <span class="accent">Computer</span> builds, in one place.</h2>
-          <p class="lede">Interactive apps, documents, images, notebooks, datasets, and videos. Each artifact is pre-built, deployed as static files, and lives at its own URL under this site.</p>
+          <div class="eyebrow">v0.3 · Thesis lab + Zettelkasten</div>
+          <h2 class="title">Notes, experiments, and artifacts toward a <span class="accent">master's in Space Studies</span>.</h2>
+          <p class="lede">A living research site: a Zettelkasten of typed-link notes, plus interactive apps, documents, images, notebooks, datasets, and videos that feed into the thesis. Everything is open and reachable at a stable URL.</p>
         </div>
       </section>
 
@@ -235,6 +238,7 @@
     <script>
       const TYPES = [
         { id: 'all',      label: 'All' },
+        { id: 'note',     label: 'Notes' },
         { id: 'app',      label: 'Apps' },
         { id: 'doc',      label: 'Documents' },
         { id: 'image',    label: 'Images' },
@@ -288,6 +292,7 @@
           notebook: 'Open →',
           dataset: 'Download',
           video: 'Watch →',
+          note: 'Read →',
         })[t] || 'Open →';
         return '<a class="btn primary" href="' + escapeHtml(target) + '"' +
           (t === 'dataset' ? ' download' : '') + '>' + label + '</a>';
