@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Zettelkasten note frontmatter",
+  "type": "object",
+  "required": ["id", "title"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{12}-[a-z0-9-]+$",
+      "description": "Zettel id: YYYYMMDDHHMM-slug"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "created": { "type": "string", "format": "date" },
+    "updated": { "type": "string", "format": "date" },
+    "type": {
+      "type": "string",
+      "enum": ["permanent", "literature", "fleeting", "hub", "source"],
+      "description": "Zettel type. 'permanent' = synthesized idea, 'literature' = notes on a source, 'fleeting' = quick capture, 'hub' = index/structure note, 'source' = bibliographic entry"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["seedling", "growing", "evergreen"]
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "thesis_chapter": { "type": "integer", "minimum": 0 },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "draft"],
+      "default": "public"
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "references":   { "type": "array", "items": { "type": "string" } },
+        "elaborates":   { "type": "array", "items": { "type": "string" } },
+        "supports":     { "type": "array", "items": { "type": "string" } },
+        "contradicts":  { "type": "array", "items": { "type": "string" } },
+        "example_of":   { "type": "array", "items": { "type": "string" } },
+        "defines":      { "type": "array", "items": { "type": "string" } },
+        "questions":    { "type": "array", "items": { "type": "string" } },
+        "derived_from": { "type": "array", "items": { "type": "string" } },
+        "related":      { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

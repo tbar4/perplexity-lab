@@ -14,7 +14,7 @@
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "type": {
             "type": "string",
-            "enum": ["app", "doc", "image", "notebook", "dataset", "video"]
+            "enum": ["app", "doc", "image", "notebook", "dataset", "video", "note"]
           },
           "title": { "type": "string" },
           "subtitle": { "type": "string" },

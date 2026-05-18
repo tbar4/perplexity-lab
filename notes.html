@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notes · Trevor Barnes · Thesis</title>
+<link rel="stylesheet" href="./notes/note.css" />
+<style>
+  main.notes-grid-wrap { display:block; padding: 32px 24px 80px; max-width: 1200px; margin: 0 auto; }
+  .filter-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .filter-row input.search { flex: 1; min-width: 240px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--text); font-family: inherit; }
+  .chip { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; font-family: ui-monospace, monospace; }
+  .chip.active { color: var(--cyan); border-color: rgba(34,211,238,0.4); background: rgba(34,211,238,0.08); }
+  .chip:hover { color: var(--text); }
+  .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .note-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: transform 0.15s ease, border-color 0.15s ease; }
+  .note-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
+  .note-card a.title-link { color: var(--text); }
+  .note-card .nc-meta { display: flex; gap: 8px; flex-wrap: wrap; font-size: 10px; color: var(--text-faint); font-family: ui-monospace, monospace; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .note-card .nc-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .note-card .nc-id { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-faint); margin-bottom: 10px; }
+  .note-card .nc-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+  .note-card .nc-foot { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-faint); font-family: ui-monospace, monospace; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; }
+  .empty { padding: 48px; text-align: center; color: var(--text-faint); background: var(--bg-card); border: 1px dashed var(--border-strong); border-radius: 14px; }
+  .summary { font-size: 12px; color: var(--text-faint); font-family: ui-monospace, monospace; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="container top-row">
+    <a class="brand" href="./">
+      <div class="logo">T</div>
+      <div class="brand-text">
+        <h1>Trevor Barnes · Thesis</h1>
+        <p>Space Studies · UND</p>
+      </div>
+    </a>
+    <nav class="top-nav">
+      <a href="./">Home</a>
+      <a href="./notes.html" aria-current="page" style="color:var(--text)">Notes</a>
+      <a href="./graph.html">Graph</a>
+      <a href="https://github.com/tbar4/perplexity-lab" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+<main class="notes-grid-wrap">
+  <h2 style="font-size:28px; margin:0 0 6px; letter-spacing:-0.02em;">Zettelkasten</h2>
+  <p style="color:var(--text-dim); margin: 0 0 20px;">Permanent notes, literature notes, and source entries. Linked by reference, support, contradiction, and seven other typed relations.</p>
+  <div class="filter-row">
+    <input class="search" id="search" type="search" placeholder="Search title, tags, id…" />
+    <div id="type-chips"></div>
+    <div id="status-chips"></div>
+  </div>
+  <div class="summary" id="summary"></div>
+  <div class="notes-grid" id="grid"></div>
+</main>
+<script>
+const TYPES = ["permanent","literature","hub","source","fleeting"];
+const STATUSES = ["evergreen","growing","seedling"];
+let DATA = { notes: [], edges: [] };
+let activeType = null;
+let activeStatus = null;
+let query = "";
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+
+function chip(label, active, onclick) {
+  const b = document.createElement("button");
+  b.className = "chip" + (active ? " active" : "");
+  b.textContent = label;
+  b.addEventListener("click", onclick);
+  return b;
+}
+function renderChips() {
+  const t = document.getElementById("type-chips");
+  const s = document.getElementById("status-chips");
+  t.innerHTML = ""; s.innerHTML = "";
+  t.appendChild(chip("all types", activeType===null, ()=>{activeType=null;render();}));
+  TYPES.forEach(x=>t.appendChild(chip(x, activeType===x, ()=>{activeType=x;render();})));
+  s.appendChild(chip("all status", activeStatus===null, ()=>{activeStatus=null;render();}));
+  STATUSES.forEach(x=>s.appendChild(chip(x, activeStatus===x, ()=>{activeStatus=x;render();})));
+}
+function matches(n){
+  if(activeType && n.type !== activeType) return false;
+  if(activeStatus && n.status !== activeStatus) return false;
+  if(query){
+    const hay = [n.id, n.title, (n.tags||[]).join(" ")].join(" ").toLowerCase();
+    if(!hay.includes(query.toLowerCase())) return false;
+  }
+  return true;
+}
+function render(){
+  renderChips();
+  const grid = document.getElementById("grid");
+  const filtered = DATA.notes.filter(matches);
+  document.getElementById("summary").textContent = filtered.length + " of " + DATA.notes.length + " notes";
+  if(filtered.length===0){ grid.innerHTML = '<div class="empty">No notes match.</div>'; return; }
+  // Sort by updated desc, then created desc, then id desc
+  filtered.sort((a,b)=>(b.updated||"").localeCompare(a.updated||"") || (b.created||"").localeCompare(a.created||"") || b.id.localeCompare(a.id));
+  grid.innerHTML = filtered.map(n=>{
+    const tagHtml = (n.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+    const metaBits = [];
+    if(n.type) metaBits.push(`<span class="zettel-type zt-${esc(n.type)}">${esc(n.type)}</span>`);
+    if(n.status) metaBits.push(`<span class="status st-${esc(n.status)}">${esc(n.status)}</span>`);
+    if(n.thesis_chapter != null) metaBits.push(`<span>ch. ${n.thesis_chapter}</span>`);
+    return `<article class="note-card">
+      <div class="nc-meta">${metaBits.join("")}</div>
+      <a class="title-link" href="${esc(n.path)}">
+        <div class="nc-title">${esc(n.title)}</div>
+        <div class="nc-id">${esc(n.id)}</div>
+      </a>
+      <div class="nc-tags">${tagHtml}</div>
+      <div class="nc-foot">
+        <span>${n.out_count||0} out · ${n.in_count||0} in</span>
+        <span>${esc(n.updated||n.created||"")}</span>
+      </div>
+    </article>`;
+  }).join("");
+}
+async function load(){
+  try{
+    const r = await fetch("./notes/index.json",{cache:"no-cache"});
+    if(!r.ok) throw new Error("index.json " + r.status);
+    DATA = await r.json();
+    document.getElementById("search").addEventListener("input", e=>{query=e.target.value.trim(); render();});
+    render();
+  }catch(e){
+    document.getElementById("grid").innerHTML = '<div class="empty">No notes yet. Drop markdown files into <code>notes_src/</code> and the build script will pick them up.</div>';
+  }
+}
+load();
+</script>
+</body>
+</html>
