@@ -8,3 +8,5 @@ sources/*/dist/
 _site/
 # Built notes output is regenerated on every Pages deploy.
 /notes/
+!notes/_assets/
+!notes/_assets/**
